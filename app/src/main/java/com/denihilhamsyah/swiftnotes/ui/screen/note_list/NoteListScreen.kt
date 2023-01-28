@@ -44,7 +44,12 @@ fun NoteListScreen() {
                 columns = StaggeredGridCells.Fixed(2),
                 content = {
                     items(notes.value) {
-                        NoteItem(note = it)
+                        NoteItem(
+                            note = it,
+                            onClick = {
+                                Toast.makeText(context, it.title, Toast.LENGTH_SHORT).show()
+                            }
+                        )
                     }
                 }
             )

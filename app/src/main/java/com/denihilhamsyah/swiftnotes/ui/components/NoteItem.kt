@@ -1,6 +1,7 @@
 package com.denihilhamsyah.swiftnotes.ui.components
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -18,14 +19,16 @@ import com.denihilhamsyah.swiftnotes.domain.model.Note
 @Composable
 fun NoteItem(
     note: Note,
+    onClick : () -> Unit
 ) {
     Card(
         modifier = Modifier
             .padding(
                 top = 8.dp,
-                start = 8.dp,
-                end = 8.dp
-            ),
+                start = 4.dp,
+                end = 4.dp
+            )
+            .clickable(onClick = onClick),
         border = BorderStroke(
             color = Color.LightGray,
             width = 0.5.dp
