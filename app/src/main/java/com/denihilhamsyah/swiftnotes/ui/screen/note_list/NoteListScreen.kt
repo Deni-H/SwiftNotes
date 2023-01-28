@@ -2,8 +2,9 @@ package com.denihilhamsyah.swiftnotes.ui.screen.note_list
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
@@ -17,10 +18,13 @@ fun NoteListScreen() {
     val notes = viewModel.notes.collectAsState(initial = emptyList())
 
     Column(modifier = Modifier.fillMaxWidth()) {
-        LazyColumn(modifier = Modifier.fillMaxWidth()) {
-            items(notes.value) {
-                NoteItem(note = it)
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(2),
+            content = {
+                items(notes.value) {
+                    NoteItem(note = it)
+                }
             }
-        }
+        )
     }
 }
