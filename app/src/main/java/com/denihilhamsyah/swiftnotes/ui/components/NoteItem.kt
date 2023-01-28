@@ -1,10 +1,7 @@
 package com.denihilhamsyah.swiftnotes.ui.components
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
@@ -23,11 +20,12 @@ fun NoteItem(
     note: Note,
 ) {
     Card(
-        modifier = Modifier.padding(
-            top = 8.dp,
-            start = 8.dp,
-            end = 8.dp
-        ),
+        modifier = Modifier
+            .padding(
+                top = 8.dp,
+                start = 8.dp,
+                end = 8.dp
+            ),
         border = BorderStroke(
             color = Color.LightGray,
             width = 0.5.dp
@@ -50,3 +48,4 @@ fun NoteItem(
         }
     }
 }
+
