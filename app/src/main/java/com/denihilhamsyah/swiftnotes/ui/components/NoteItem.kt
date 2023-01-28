@@ -19,12 +19,19 @@ import com.denihilhamsyah.swiftnotes.domain.model.Note
 
 @Composable
 fun NoteItem(
-    note: Note
+    note: Note,
 ) {
     Card(
-        modifier = Modifier.padding(top = 8.dp, start = 8.dp, end = 8.dp),
-        shape = RoundedCornerShape(corner = CornerSize(10.dp)),
-        border = BorderStroke(color = Color.LightGray, width = 0.5.dp)
+        modifier = Modifier.padding(
+            top = 8.dp,
+            start = 8.dp,
+            end = 8.dp
+        ),
+        border = BorderStroke(
+            color = Color.LightGray,
+            width = 0.5.dp
+        ),
+        shape = RoundedCornerShape(corner = CornerSize(10.dp))
     ) {
         Column (modifier = Modifier.padding(16.dp)){
             Text(
