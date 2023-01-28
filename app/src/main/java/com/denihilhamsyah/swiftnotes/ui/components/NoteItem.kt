@@ -22,7 +22,7 @@ fun NoteItem(
     note: Note
 ) {
     Card(
-        modifier = Modifier.padding(16.dp),
+        modifier = Modifier.padding(top = 8.dp, start = 8.dp, end = 8.dp),
         shape = RoundedCornerShape(corner = CornerSize(10.dp)),
         border = BorderStroke(color = Color.LightGray, width = 0.5.dp)
     ) {
@@ -32,7 +32,7 @@ fun NoteItem(
                 style = MaterialTheme.typography.body2,
                 fontWeight = FontWeight.SemiBold
             )
-            Spacer(modifier = Modifier.height(4.dp))
+            Spacer(modifier = Modifier.height(8.dp))
             Text(
                 text = note.description!!,
                 style = MaterialTheme.typography.body2
