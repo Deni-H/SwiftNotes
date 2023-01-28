@@ -22,8 +22,8 @@ fun NoteListScreen() {
         Button(onClick = {
             viewModel.insertNote(
                 id = 1,
-                title = "Hello World",
-                description = "This is an example"
+                title = "That's it",
+                description = "Congratulations you have successfully learn font family customization in android jetpack compose."
             )
         }) {
             Text(text = "Add example note")
@@ -31,7 +31,7 @@ fun NoteListScreen() {
 
         LazyColumn(modifier = Modifier.fillMaxWidth()) {
             items(notes.value) {
-//                NoteItem(note = it)
+                NoteItem(note = it)
             }
         }
     }
