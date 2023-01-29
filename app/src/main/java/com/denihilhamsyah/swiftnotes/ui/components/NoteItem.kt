@@ -36,18 +36,22 @@ fun NoteItem(
         shape = RoundedCornerShape(corner = CornerSize(10.dp))
     ) {
         Column (modifier = Modifier.padding(16.dp)){
-            Text(
-                text = note.title!!,
-                style = MaterialTheme.typography.body2,
-                fontWeight = FontWeight.SemiBold
-            )
+            if (!note.title.isNullOrEmpty()) {
+                Text(
+                    text = note.title,
+                    style = MaterialTheme.typography.body2,
+                    fontWeight = FontWeight.SemiBold
+                )
+            }
             Spacer(modifier = Modifier.height(8.dp))
-            Text(
-                text = note.description!!,
-                style = MaterialTheme.typography.body2,
-                maxLines = 20,
-                overflow = TextOverflow.Ellipsis
-            )
+            if (!note.description.isNullOrEmpty()) {
+                Text(
+                    text = note.description,
+                    style = MaterialTheme.typography.body2,
+                    maxLines = 20,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
         }
     }
 }
