@@ -37,7 +37,7 @@ fun NoteItem(
     ) {
         Column (modifier = Modifier.padding(16.dp)){
             Text(
-                text = note.title,
+                text = note.title!!,
                 style = MaterialTheme.typography.body2,
                 fontWeight = FontWeight.SemiBold
             )

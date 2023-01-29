@@ -10,6 +10,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.denihilhamsyah.swiftnotes.ui.components.TopBar
 import com.denihilhamsyah.swiftnotes.ui.components.NoteTextField
 
 @Composable
@@ -21,12 +22,10 @@ fun AddEditScreen(
     val description = viewModel.description
 
     Scaffold(
+        topBar = { TopBar(navController)},
         content = { paddingValues ->
-            BackHandler(enabled = true, onBack = {
-                viewModel.insertNote(
-                    title = title.value,
-                    description = description.value
-                )
+            BackHandler(onBack = {
+                viewModel.insertNote()
                 navController.popBackStack()
             })
             Column(

@@ -1,6 +1,6 @@
 package com.denihilhamsyah.swiftnotes.ui.screen.note_list
 
-import android.widget.Toast
+import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -18,14 +18,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.denihilhamsyah.swiftnotes.R
-import com.denihilhamsyah.swiftnotes.ui.components.NoteItem
+import com.denihilhamsyah.swiftnotes.TAG
 import com.denihilhamsyah.swiftnotes.navigation.Screen
+import com.denihilhamsyah.swiftnotes.ui.components.NoteItem
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -34,7 +34,6 @@ fun NoteListScreen(
 ) {
     val viewModel: NoteListViewModel = hiltViewModel()
     val notes = viewModel.notes.collectAsState(initial = emptyList())
-    val context = LocalContext.current
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -43,7 +42,7 @@ fun NoteListScreen(
                 navController.navigate(route = Screen.AddEditNote.route)
             }) {
                 Image(
-                    painter = painterResource(id = R.drawable.add_note),
+                    painter = painterResource(id = R.drawable.ic_add_note),
                     contentDescription = "add_note"
                 )
             }
@@ -58,7 +57,7 @@ fun NoteListScreen(
                             NoteItem(
                                 note = it,
                                 onClick = {
-                                    Toast.makeText(context, it.title, Toast.LENGTH_SHORT).show()
+                                    Log.d(TAG, it.id.toString())
                                 }
                             )
                         }
