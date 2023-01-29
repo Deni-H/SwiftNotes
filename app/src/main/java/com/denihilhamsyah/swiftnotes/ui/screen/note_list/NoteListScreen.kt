@@ -20,13 +20,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import com.denihilhamsyah.swiftnotes.R
 import com.denihilhamsyah.swiftnotes.ui.components.NoteItem
+import com.denihilhamsyah.swiftnotes.util.Screen
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun NoteListScreen() {
+fun NoteListScreen(
+    navController: NavController
+) {
     val viewModel: NoteListViewModel = hiltViewModel()
     val notes = viewModel.notes.collectAsState(initial = emptyList())
     val context = LocalContext.current
@@ -35,7 +40,7 @@ fun NoteListScreen() {
         modifier = Modifier.fillMaxSize(),
         floatingActionButton = {
             FloatingActionButton(onClick = {
-                Toast.makeText(context, "Clicked", Toast.LENGTH_SHORT).show()
+                navController.navigate(route = Screen.AddEditNote.route)
             }) {
                 Image(
                     painter = painterResource(id = R.drawable.add_note),
@@ -74,7 +79,7 @@ fun EmptyScreen() {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "Notes you add appears here",
+            text = stringResource(R.string.empty_screen_msg),
             style = MaterialTheme.typography.body1,
         )
     }

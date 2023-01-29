@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Swift Notes</string>
+    <string name="empty_screen_msg">Notes you add appears here</string>
 </resources>

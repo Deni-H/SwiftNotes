@@ -21,8 +21,7 @@ class NoteListViewModel @Inject constructor(
                 id = id,
                 title = title,
                 description = description
-            )
-            )
+            ))
         }
     }
 }
