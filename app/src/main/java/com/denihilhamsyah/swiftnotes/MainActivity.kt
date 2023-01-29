@@ -6,7 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.denihilhamsyah.swiftnotes.ui.theme.SwiftNotesTheme
-import com.denihilhamsyah.swiftnotes.util.SetupNavGraph
+import com.denihilhamsyah.swiftnotes.navigation.SetupNavGraph
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

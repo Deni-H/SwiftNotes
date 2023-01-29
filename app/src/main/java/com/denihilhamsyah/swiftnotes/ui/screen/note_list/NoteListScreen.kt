@@ -25,7 +25,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.denihilhamsyah.swiftnotes.R
 import com.denihilhamsyah.swiftnotes.ui.components.NoteItem
-import com.denihilhamsyah.swiftnotes.util.Screen
+import com.denihilhamsyah.swiftnotes.navigation.Screen
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable

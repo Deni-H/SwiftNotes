@@ -1,4 +1,4 @@
-package com.denihilhamsyah.swiftnotes.util
+package com.denihilhamsyah.swiftnotes.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
