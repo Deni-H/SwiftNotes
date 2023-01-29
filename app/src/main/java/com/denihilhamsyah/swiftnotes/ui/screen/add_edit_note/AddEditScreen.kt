@@ -15,9 +15,12 @@ import com.denihilhamsyah.swiftnotes.ui.components.NoteTextField
 
 @Composable
 fun AddEditScreen(
-    navController: NavController
+    navController: NavController,
+    noteId: Int
 ) {
     val viewModel: AddEditViewModel = hiltViewModel()
+    viewModel.setId(noteId)
+
     val title = viewModel.title
     val description = viewModel.description
 

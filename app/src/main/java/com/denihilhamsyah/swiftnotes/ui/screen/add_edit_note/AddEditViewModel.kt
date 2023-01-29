@@ -6,28 +6,43 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
-import com.denihilhamsyah.swiftnotes.TAG
+import com.denihilhamsyah.swiftnotes.util.TAG
 import com.denihilhamsyah.swiftnotes.domain.model.Note
 import com.denihilhamsyah.swiftnotes.domain.repository.NoteRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class AddEditViewModel @Inject constructor(
     private val noteRepository: NoteRepository
-): ViewModel() {
+) : ViewModel() {
 
-    val id: MutableState<Int?> = mutableStateOf(null)
+    private val _id: MutableState<Int?> = mutableStateOf(null)
     val title: MutableState<String> = mutableStateOf("")
     val description: MutableState<String> = mutableStateOf("")
 
+    fun setId(id: Int) {
+        if (id != -1) {
+            _id.value = id
+            Log.d(TAG, _id.value.toString())
+            viewModelScope.launch(Dispatchers.IO) {
+                val result = noteRepository.getNoteById(id)!!
+                launch(Dispatchers.Main) {
+                    title.value = result.title!!
+                    description.value = result.description!!
+                }
+            }
+        }
+    }
+
     fun insertNote(navController: NavController) {
         if (title.value.isNotEmpty() || description.value.isNotEmpty()) {
-            viewModelScope.launch {
+            viewModelScope.launch(Dispatchers.IO) {
                 noteRepository.insertNote(
                     Note(
-                        id = id.value,
+                        id = _id.value,
                         title = title.value,
                         description = description.value
                     )

@@ -23,7 +23,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.denihilhamsyah.swiftnotes.R
-import com.denihilhamsyah.swiftnotes.TAG
 import com.denihilhamsyah.swiftnotes.navigation.Screen
 import com.denihilhamsyah.swiftnotes.ui.components.NoteItem
 
@@ -32,6 +31,7 @@ import com.denihilhamsyah.swiftnotes.ui.components.NoteItem
 fun NoteListScreen(
     navController: NavController
 ) {
+    val tag = "NoteListScreen"
     val viewModel: NoteListViewModel = hiltViewModel()
     val notes = viewModel.notes.collectAsState(initial = emptyList())
 
@@ -57,7 +57,8 @@ fun NoteListScreen(
                             NoteItem(
                                 note = it,
                                 onClick = {
-                                    Log.d(TAG, it.id.toString())
+                                    navController.navigate(route = Screen.AddEditNote.setId(it.id!!))
+                                    Log.d(tag, it.id.toString())
                                 }
                             )
                         }
