@@ -18,7 +18,11 @@ class AddEditViewModel @Inject constructor(
     val title: MutableState<String> = mutableStateOf("")
     val description: MutableState<String> = mutableStateOf("")
 
-    fun insertNote(id: Int, title: String, description: String?) {
+    fun insertNote(
+        id: Int? = null,
+        title: String,
+        description: String?
+    ) {
         viewModelScope.launch {
             noteRepository.insertNote(
                 Note(

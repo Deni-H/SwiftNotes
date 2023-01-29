@@ -1,5 +1,6 @@
 package com.denihilhamsyah.swiftnotes.ui.screen.add_edit_note
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
@@ -8,16 +9,26 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import com.denihilhamsyah.swiftnotes.ui.components.NoteTextField
 
 @Composable
-fun AddEditScreen() {
+fun AddEditScreen(
+    navController: NavController
+) {
     val viewModel: AddEditViewModel = hiltViewModel()
     val title = viewModel.title
     val description = viewModel.description
 
     Scaffold(
         content = { paddingValues ->
+            BackHandler(enabled = true, onBack = {
+                viewModel.insertNote(
+                    title = title.value,
+                    description = description.value
+                )
+                navController.popBackStack()
+            })
             Column(
                 modifier = Modifier
                     .fillMaxSize()

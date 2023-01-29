@@ -23,7 +23,7 @@ fun SetupNavGraph(
         composable(
             route = Screen.AddEditNote.route
         ) {
-            AddEditScreen()
+            AddEditScreen(navController)
         }
     }
 }
