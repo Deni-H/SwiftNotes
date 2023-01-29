@@ -22,11 +22,14 @@ fun AddEditScreen(
     val description = viewModel.description
 
     Scaffold(
-        topBar = { TopBar(navController)},
+        topBar = {
+            TopBar(onClickBack = {
+                viewModel.insertNote(navController)
+            })
+        },
         content = { paddingValues ->
             BackHandler(onBack = {
-                viewModel.insertNote()
-                navController.popBackStack()
+                viewModel.insertNote(navController)
             })
             Column(
                 modifier = Modifier

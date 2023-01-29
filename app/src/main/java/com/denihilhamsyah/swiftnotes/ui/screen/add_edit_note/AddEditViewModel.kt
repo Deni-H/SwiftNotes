@@ -5,6 +5,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavController
 import com.denihilhamsyah.swiftnotes.TAG
 import com.denihilhamsyah.swiftnotes.domain.model.Note
 import com.denihilhamsyah.swiftnotes.domain.repository.NoteRepository
@@ -21,7 +22,7 @@ class AddEditViewModel @Inject constructor(
     val title: MutableState<String> = mutableStateOf("")
     val description: MutableState<String> = mutableStateOf("")
 
-    fun insertNote() {
+    fun insertNote(navController: NavController) {
         if (title.value.isNotEmpty() || description.value.isNotEmpty()) {
             viewModelScope.launch {
                 noteRepository.insertNote(
@@ -35,5 +36,6 @@ class AddEditViewModel @Inject constructor(
         } else {
             Log.d(TAG, "Title and description is empty")
         }
+        navController.popBackStack()
     }
 }
