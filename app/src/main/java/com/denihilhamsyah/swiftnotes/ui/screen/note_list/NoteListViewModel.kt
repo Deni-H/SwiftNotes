@@ -9,5 +9,6 @@ import javax.inject.Inject
 class NoteListViewModel @Inject constructor(
     noteRepository: NoteRepository
 ): ViewModel() {
+
     val notes = noteRepository.getAllNotes()
 }

@@ -1,6 +1,5 @@
 package com.denihilhamsyah.swiftnotes.ui.screen.note_list
 
-import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -14,8 +13,7 @@ import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -35,6 +33,9 @@ fun NoteListScreen(
     val viewModel: NoteListViewModel = hiltViewModel()
     val notes = viewModel.notes.collectAsState(initial = emptyList())
 
+    val isSelectItem = remember { mutableStateOf(false) }
+    val selectedItem = remember { mutableStateListOf<Int>() }
+
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         floatingActionButton = {
@@ -46,29 +47,43 @@ fun NoteListScreen(
                     contentDescription = "add_note"
                 )
             }
-        },
-        content = { paddingValues ->
-            if(notes.value.isNotEmpty()) {
-                LazyVerticalStaggeredGrid(
-                    modifier = Modifier.padding(paddingValues),
-                    columns = StaggeredGridCells.Fixed(2),
-                    content = {
-                        items(notes.value) {
-                            NoteItem(
-                                note = it,
-                                onClick = {
-                                    navController.navigate(route = Screen.AddEditNote.setId(it.id!!))
-                                    Log.d(tag, it.id.toString())
-                                }
-                            )
-                        }
-                    }
-                )
-            } else {
-                EmptyScreen()
-            }
         }
-    )
+    ) { paddingValues ->
+        if (notes.value.isNotEmpty()) {
+            LazyVerticalStaggeredGrid(
+                modifier = Modifier.padding(paddingValues),
+                columns = StaggeredGridCells.Fixed(2)
+            ) {
+                items(notes.value) {
+                    val id: Int = it.id!!
+                    NoteItem(
+                        note = it,
+                        selected = id in selectedItem,
+                        onClick = {
+                            if (isSelectItem.value) {
+                                if (id in selectedItem) {
+                                    selectedItem.remove(id)
+                                    if (selectedItem.size == 0) {
+                                        isSelectItem.value = false
+                                    }
+                                } else {
+                                    selectedItem.add(id)
+                                }
+                            } else {
+                                navController.navigate(route = Screen.AddEditNote.setId(id))
+                            }
+                        },
+                        onLongClick = {
+                            selectedItem.add(id)
+                            isSelectItem.value = true
+                        }
+                    )
+                }
+            }
+        } else {
+            EmptyScreen()
+        }
+    }
 }
 
 @Composable
