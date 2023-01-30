@@ -15,6 +15,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -25,12 +26,14 @@ import com.denihilhamsyah.swiftnotes.R
 import com.denihilhamsyah.swiftnotes.navigation.Screen
 import com.denihilhamsyah.swiftnotes.ui.components.NoteItem
 
+
+const val TAG = "NoteListScreen"
+
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun NoteListScreen(
     navController: NavController
 ) {
-    val tag = "NoteListScreen"
     val viewModel: NoteListViewModel = hiltViewModel()
     val notes = viewModel.notes.collectAsState(initial = emptyList())
 
@@ -60,33 +63,19 @@ fun NoteListScreen(
                     NoteItem(
                         note = it,
                         selected = id in selectedItem,
-                        onClick = {
-                            if (isSelectItem.value) {
-                                if (id in selectedItem) {
-                                    selectedItem.remove(id)
-                                    Log.d(tag, "Item removed from selectedItem $id")
-                                    if (selectedItem.size == 0) {
-                                        isSelectItem.value = false
-                                        Log.d(tag, "isSelectItem = ${isSelectItem.value}")
-                                    }
-                                } else {
-                                    selectedItem.add(id)
-                                    Log.d(tag, "Item added to selectedItem $id")
-                                }
-                            } else {
-                                navController.navigate(route = Screen.AddEditNote.setId(id))
-                            }
-                        },
-                        onLongClick = {
-                            if (id !in selectedItem) {
-                                selectedItem.add(id)
-                                isSelectItem.value = true
-                                Log.d(tag, "Item added to selectedItem $id")
-                            }
-                        }
+                        onClick = { selectNote(
+                            navController,
+                            isSelectItem,
+                            selectedItem,
+                            id
+                        )},
+                        onLongClick = { toggleNoteSelection(
+                            selectedItem,
+                            isSelectItem,
+                            id
+                        ) }
                     )
                 }
-
             }
         } else {
             EmptyScreen()
@@ -105,5 +94,42 @@ fun EmptyScreen() {
             text = stringResource(R.string.empty_screen_msg),
             style = MaterialTheme.typography.body1,
         )
+    }
+}
+
+private fun selectNote(
+    navController: NavController,
+    isSelectItem: MutableState<Boolean>,
+    selectedItem: SnapshotStateList<Int>,
+    id: Int
+) {
+    if (isSelectItem.value) {
+        if (id in selectedItem) {
+            selectedItem.remove(id)
+            Log.d(TAG, "Item $id removed")
+            if (selectedItem.size == 0) {
+                isSelectItem.value = false
+                Log.d(TAG, "Select item: ${isSelectItem.value}")
+            }
+        } else {
+            selectedItem.add(id)
+            Log.d(TAG, "Item $id added")
+        }
+    } else {
+        navController.navigate(route = Screen.AddEditNote.setId(id))
+    }
+}
+
+private fun toggleNoteSelection(
+    selectedItem: SnapshotStateList<Int>,
+    isSelectItem: MutableState<Boolean>,
+    id: Int
+) {
+    if (id !in selectedItem) {
+        selectedItem.add(id)
+        Log.d(TAG, "Item $id added")
+
+        isSelectItem.value = true
+        Log.d(TAG, "Select item: ${isSelectItem.value}")
     }
 }
