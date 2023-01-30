@@ -1,5 +1,6 @@
 package com.denihilhamsyah.swiftnotes.ui.screen.note_list
 
+import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -63,19 +64,25 @@ fun NoteListScreen(
                             if (isSelectItem.value) {
                                 if (id in selectedItem) {
                                     selectedItem.remove(id)
+                                    Log.d(tag, "Item removed from selectedItem $id")
                                     if (selectedItem.size == 0) {
                                         isSelectItem.value = false
+                                        Log.d(tag, "isSelectItem = ${isSelectItem.value}")
                                     }
                                 } else {
                                     selectedItem.add(id)
+                                    Log.d(tag, "Item added to selectedItem $id")
                                 }
                             } else {
                                 navController.navigate(route = Screen.AddEditNote.setId(id))
                             }
                         },
                         onLongClick = {
-                            selectedItem.add(id)
-                            isSelectItem.value = true
+                            if (id !in selectedItem) {
+                                selectedItem.add(id)
+                                isSelectItem.value = true
+                                Log.d(tag, "Item added to selectedItem $id")
+                            }
                         }
                     )
                 }
