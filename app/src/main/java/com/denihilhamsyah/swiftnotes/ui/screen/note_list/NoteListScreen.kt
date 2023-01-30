@@ -1,25 +1,24 @@
 package com.denihilhamsyah.swiftnotes.ui.screen.note_list
 
 import android.util.Log
+import android.widget.Toast
+import androidx.compose.animation.*
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.items
-import androidx.compose.material.FloatingActionButton
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.denihilhamsyah.swiftnotes.R
@@ -29,7 +28,7 @@ import com.denihilhamsyah.swiftnotes.ui.components.NoteItem
 
 const val TAG = "NoteListScreen"
 
-@OptIn(ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalAnimationApi::class)
 @Composable
 fun NoteListScreen(
     navController: NavController
@@ -37,11 +36,29 @@ fun NoteListScreen(
     val viewModel: NoteListViewModel = hiltViewModel()
     val notes = viewModel.notes.collectAsState(initial = emptyList())
 
+    val context = LocalContext.current
+
     val isSelectItem = remember { mutableStateOf(false) }
     val selectedItem = remember { mutableStateListOf<Int>() }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
+        topBar = {
+                 AnimatedVisibility(
+                     visible = isSelectItem.value,
+                     enter = scaleIn(initialScale = 0.9f) + fadeIn(),
+                     exit = scaleOut(targetScale = 0.9f) + fadeOut()
+                 ) {
+                     SelectTopBar(
+                         onClickBack = {
+                             isSelectItem.value = false
+                             selectedItem.clear()
+                         },
+                         onClickDelete = { Toast.makeText(context, "Coming soon!", Toast.LENGTH_SHORT).show()},
+                         selectedItemSize = selectedItem.size
+                     )
+                 }
+        },
         floatingActionButton = {
             FloatingActionButton(onClick = {
                 navController.navigate(route = Screen.AddEditNote.route)
@@ -68,12 +85,12 @@ fun NoteListScreen(
                             isSelectItem,
                             selectedItem,
                             id
-                        )},
+                        ) },
                         onLongClick = { toggleNoteSelection(
                             selectedItem,
                             isSelectItem,
                             id
-                        ) }
+                        ) },
                     )
                 }
             }
@@ -81,6 +98,46 @@ fun NoteListScreen(
             EmptyScreen()
         }
     }
+}
+
+
+@Composable
+fun SelectTopBar(
+    onClickBack: () -> Unit,
+    onClickDelete: () -> Unit,
+    selectedItemSize: Int
+) {
+   Surface(elevation = 8.dp) {
+       Row(
+           modifier = Modifier
+               .fillMaxWidth()
+               .height(60.dp),
+           verticalAlignment = Alignment.CenterVertically,
+           horizontalArrangement = Arrangement.SpaceBetween
+       ) {
+           Row(
+               verticalAlignment = Alignment.CenterVertically
+           ) {
+               IconButton(onClick = onClickBack) {
+                   Icon(
+                       painter = painterResource(id = R.drawable.ic_close),
+                       contentDescription = "back_button"
+                   )
+               }
+               Text(
+                   text = selectedItemSize.toString(),
+                   style = MaterialTheme.typography.body1.copy(fontSize = 22.sp)
+               )
+           }
+
+           IconButton(onClick = onClickDelete) {
+               Icon(
+                   painter = painterResource(id = R.drawable.ic_delete),
+                   contentDescription = "delete_button"
+               )
+           }
+       }
+   }
 }
 
 @Composable
