@@ -1,6 +1,7 @@
 package com.denihilhamsyah.swiftnotes.ui.screen.note_list
 
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.animation.*
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
@@ -13,6 +14,7 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -36,6 +38,8 @@ fun NoteListScreen(
     val isSelectItem = remember { mutableStateOf(false) }
     val selectedItem = remember { mutableStateListOf<Int>() }
 
+    val context = LocalContext.current
+
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
@@ -52,6 +56,11 @@ fun NoteListScreen(
                          onClickDelete = {
                              viewModel.deleteNote(selectedItem)
                              isSelectItem.value = false
+                         },
+                         onClickArchive = {
+                             viewModel.archiveNote(selectedItem)
+                             isSelectItem.value = false
+                             Toast.makeText(context, "Note archived", Toast.LENGTH_SHORT).show()
                          },
                          selectedItemSize = selectedItem.size
                      )
@@ -102,6 +111,7 @@ fun NoteListScreen(
 fun SelectTopBar(
     onClickBack: () -> Unit,
     onClickDelete: () -> Unit,
+    onClickArchive: () -> Unit,
     selectedItemSize: Int
 ) {
    Surface(elevation = 8.dp) {
@@ -126,12 +136,21 @@ fun SelectTopBar(
                    style = MaterialTheme.typography.body1.copy(fontSize = 22.sp)
                )
            }
+            
+           Row(verticalAlignment = Alignment.CenterVertically) {
+               IconButton(onClick = onClickArchive) {
+                   Icon(
+                       painter = painterResource(id = R.drawable.ic_archived),
+                       contentDescription = "archive_button"
+                   )
+               }
 
-           IconButton(onClick = onClickDelete) {
-               Icon(
-                   painter = painterResource(id = R.drawable.ic_delete),
-                   contentDescription = "delete_button"
-               )
+               IconButton(onClick = onClickDelete) {
+                   Icon(
+                       painter = painterResource(id = R.drawable.ic_delete),
+                       contentDescription = "delete_button"
+                   )
+               }
            }
        }
    }
