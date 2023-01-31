@@ -9,14 +9,17 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.items
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -43,28 +46,28 @@ fun NoteListScreen(
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
-                 AnimatedVisibility(
-                     visible = isSelectItem.value,
-                     enter = scaleIn(initialScale = 0.9f) + fadeIn(),
-                     exit = scaleOut(targetScale = 0.9f) + fadeOut()
-                 ) {
-                     SelectTopBar(
-                         onClickBack = {
-                             selectedItem.clear()
-                             isSelectItem.value = false
-                         },
-                         onClickDelete = {
-                             viewModel.deleteNote(selectedItem)
-                             isSelectItem.value = false
-                         },
-                         onClickArchive = {
-                             viewModel.archiveNote(selectedItem)
-                             isSelectItem.value = false
-                             Toast.makeText(context, "Note archived", Toast.LENGTH_SHORT).show()
-                         },
-                         selectedItemSize = selectedItem.size
-                     )
-                 }
+            AnimatedVisibility(
+                visible = isSelectItem.value,
+                enter = scaleIn(initialScale = 0.9f) + fadeIn(),
+                exit = scaleOut(targetScale = 0.9f) + fadeOut()
+            ) {
+                SelectTopBar(
+                    onClickBack = {
+                        selectedItem.clear()
+                        isSelectItem.value = false
+                    },
+                    onClickDelete = {
+                        viewModel.deleteNote(selectedItem)
+                        isSelectItem.value = false
+                    },
+                    onClickArchive = {
+                        viewModel.archiveNote(selectedItem)
+                        isSelectItem.value = false
+                        Toast.makeText(context, "Note archived", Toast.LENGTH_SHORT).show()
+                    },
+                    selectedItemSize = selectedItem.size
+                )
+            }
         },
         floatingActionButton = {
             FloatingActionButton(onClick = {
@@ -103,6 +106,49 @@ fun NoteListScreen(
             }
         } else {
             EmptyScreen()
+        }
+    }
+}
+
+@Composable
+fun TopBar(
+    query: MutableState<String>,
+    onMenuClick: () -> Unit,
+    onProfileClick: () -> Unit
+) {
+    Surface(elevation = 8.dp) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(60.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            IconButton(onClick = onMenuClick) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_menu),
+                    contentDescription = "menu_button"
+                )
+            }
+            TextField(
+                value = query.value,
+                onValueChange = { query.value = it },
+                placeholder = { Text(text = "Search your notes") },
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
+                colors = TextFieldDefaults.textFieldColors(
+                    backgroundColor = Color.White,
+                    disabledTextColor = Color.Transparent,
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent,
+                    disabledIndicatorColor = Color.Transparent
+                )
+            )
+        }
+        IconButton(onClick = onProfileClick) {
+            Icon(
+                painter = painterResource(id = R.drawable.ic_profile),
+                contentDescription = "profile_button"
+            )
         }
     }
 }
