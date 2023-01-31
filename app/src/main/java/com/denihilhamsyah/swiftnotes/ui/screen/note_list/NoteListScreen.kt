@@ -47,8 +47,8 @@ fun NoteListScreen(
                  ) {
                      SelectTopBar(
                          onClickBack = {
-                             isSelectItem.value = false
                              selectedItem.clear()
+                             isSelectItem.value = false
                          },
                          onClickDelete = {
                              viewModel.deleteNote(selectedItem)

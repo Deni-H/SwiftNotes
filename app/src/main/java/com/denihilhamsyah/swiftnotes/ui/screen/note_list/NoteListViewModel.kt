@@ -9,7 +9,6 @@ import com.denihilhamsyah.swiftnotes.domain.repository.NoteRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -22,15 +21,29 @@ class NoteListViewModel @Inject constructor(
     fun deleteNote(items: SnapshotStateList<Int>) {
         viewModelScope.launch(Dispatchers.IO) {
             for (i in items) {
-                noteRepository.deleteNote(getNoteById(i))
+                val note = noteRepository.getNoteById(i)!!
+                noteRepository.deleteNote(note)
                 Log.d(TAG, "Removing $i")
             }
             items.clear()
         }
     }
-    private suspend fun getNoteById(id: Int): Note {
-        return withContext(Dispatchers.IO) {
-            noteRepository.getNoteById(id)!!
+
+    fun archiveNote(items: SnapshotStateList<Int>) {
+        viewModelScope.launch(Dispatchers.IO) {
+            for (i in items) {
+                val note = noteRepository.getNoteById(i)!!
+                noteRepository.insertNote(
+                    Note(
+                        id = note.id,
+                        title = note.title,
+                        description = note.description,
+                        archived = true
+                    )
+                )
+                Log.d(TAG, "Note $i archived")
+            }
+            items.clear()
         }
     }
 }
