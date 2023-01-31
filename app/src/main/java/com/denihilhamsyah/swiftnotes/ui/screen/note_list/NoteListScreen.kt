@@ -33,7 +33,6 @@ fun NoteListScreen(
 ) {
     val viewModel: NoteListViewModel = hiltViewModel()
     val notes = viewModel.notes.collectAsState(initial = emptyList())
-
     val isSelectItem = remember { mutableStateOf(false) }
     val selectedItem = remember { mutableStateListOf<Int>() }
 

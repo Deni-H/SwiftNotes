@@ -8,6 +8,7 @@ import com.denihilhamsyah.swiftnotes.domain.model.Note
 import com.denihilhamsyah.swiftnotes.domain.repository.NoteRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -16,7 +17,11 @@ class NoteListViewModel @Inject constructor(
     private val noteRepository: NoteRepository
 ): ViewModel() {
 
-    val notes = noteRepository.getAllNotes()
+    val notes = noteRepository.getAllNotes().map {
+        it.filter { item ->
+            !item.archived
+        }
+    }
 
     fun deleteNote(items: SnapshotStateList<Int>) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -38,10 +43,10 @@ class NoteListViewModel @Inject constructor(
                         id = note.id,
                         title = note.title,
                         description = note.description,
-                        archived = true
+                        archived = !note.archived
                     )
                 )
-                Log.d(TAG, "Note $i archived")
+                Log.d(TAG, "Note $i archived = ${!note.archived}")
             }
             items.clear()
         }
