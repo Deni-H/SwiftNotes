@@ -41,11 +41,34 @@ fun NoteListScreen(
     val isSelectItem = remember { mutableStateOf(false) }
     val selectedItem = remember { mutableStateListOf<Int>() }
 
+    val query = remember {
+        mutableStateOf("")
+    }
+
     val context = LocalContext.current
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
+            AnimatedVisibility(
+                visible = !isSelectItem.value,
+                enter = scaleIn(initialScale = 0.9f) + fadeIn(),
+                exit = scaleOut(targetScale = 0.9f) + fadeOut()
+            ) {
+                TopBar(
+                    value = query.value,
+                    onValueChange = {
+                        query.value = it
+                    },
+                    onMenuClick = {
+                        Toast.makeText(context, "Coming soon!", Toast.LENGTH_SHORT).show()
+                    },
+                    onProfileClick = {
+                        Toast.makeText(context, "Coming soon!", Toast.LENGTH_SHORT).show()
+                    }
+                )
+            }
+
             AnimatedVisibility(
                 visible = isSelectItem.value,
                 enter = scaleIn(initialScale = 0.9f) + fadeIn(),
@@ -112,7 +135,8 @@ fun NoteListScreen(
 
 @Composable
 fun TopBar(
-    query: MutableState<String>,
+    value: String,
+    onValueChange: (String) -> Unit,
     onMenuClick: () -> Unit,
     onProfileClick: () -> Unit
 ) {
@@ -124,31 +148,33 @@ fun TopBar(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            IconButton(onClick = onMenuClick) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_menu),
-                    contentDescription = "menu_button"
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                IconButton(onClick = onMenuClick) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_menu),
+                        contentDescription = "menu_button"
+                    )
+                }
+                TextField(
+                    value = value,
+                    onValueChange = onValueChange,
+                    placeholder = { Text(text = "Search your notes") },
+                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
+                    colors = TextFieldDefaults.textFieldColors(
+                        backgroundColor = Color.White,
+                        disabledTextColor = Color.Transparent,
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent,
+                        disabledIndicatorColor = Color.Transparent
+                    )
                 )
             }
-            TextField(
-                value = query.value,
-                onValueChange = { query.value = it },
-                placeholder = { Text(text = "Search your notes") },
-                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
-                colors = TextFieldDefaults.textFieldColors(
-                    backgroundColor = Color.White,
-                    disabledTextColor = Color.Transparent,
-                    focusedIndicatorColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent,
-                    disabledIndicatorColor = Color.Transparent
+            IconButton(onClick = onProfileClick) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_profile),
+                    contentDescription = "profile_button"
                 )
-            )
-        }
-        IconButton(onClick = onProfileClick) {
-            Icon(
-                painter = painterResource(id = R.drawable.ic_profile),
-                contentDescription = "profile_button"
-            )
+            }
         }
     }
 }
