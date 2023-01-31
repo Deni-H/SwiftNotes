@@ -37,8 +37,6 @@ fun NoteListScreen(
     val isSelectItem = remember { mutableStateOf(false) }
     val selectedItem = remember { mutableStateListOf<Int>() }
 
-
-
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
@@ -100,7 +98,6 @@ fun NoteListScreen(
         }
     }
 }
-
 
 @Composable
 fun SelectTopBar(
@@ -165,7 +162,7 @@ private fun selectNote(
         if (id in selectedItem) {
             selectedItem.remove(id)
             Log.d(TAG, "Item $id removed")
-            if (selectedItem.size == 0) {
+            if (selectedItem.isEmpty()) {
                 isSelectItem.value = false
                 Log.d(TAG, "Select item: ${isSelectItem.value}")
             }
