@@ -22,25 +22,18 @@ class NoteListViewModel @Inject constructor(
     private val _notes = noteRepository.getAllNotes()
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    val notes = query
-        .flatMapLatest { query ->
-            searchNotes(query).map { item ->
-                item.filter {
-                    !it.archived
-                }
-            }
-        }
+    val notes = query.flatMapLatest { query -> searchNotes(query) }
+
+    fun setQuery(query: String) {
+        this.query.value = query
+    }
 
     private fun searchNotes(query: String): Flow<List<Note>> {
         return _notes.map { item ->
             item.filter {
-                it.title!!.contains(query) || it.description!!.contains(query)
+                !it.archived && (it.title!!.contains(query) || it.description!!.contains(query))
             }
         }
-    }
-
-    fun setQuery(query: String) {
-        this.query.value = query
     }
 
     fun deleteNote(items: SnapshotStateList<Int>) {
