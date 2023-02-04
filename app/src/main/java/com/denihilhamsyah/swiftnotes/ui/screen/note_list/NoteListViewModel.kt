@@ -11,6 +11,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -25,13 +26,13 @@ class NoteListViewModel @Inject constructor(
     val notes = query.flatMapLatest { query -> searchNotes(query) }
 
     fun setQuery(query: String) {
-        this.query.value = query
+        this.query.value = query.lowercase()
     }
 
     private fun searchNotes(query: String): Flow<List<Note>> {
         return _notes.map { item ->
             item.filter {
-                !it.archived && (it.title!!.contains(query) || it.description!!.contains(query))
+                !it.archived && (it.title!!.lowercase().contains(query) || it.description!!.lowercase().contains(query))
             }
         }
     }
