@@ -31,16 +31,16 @@ class NoteListViewModel @Inject constructor(
             }
         }
 
-    fun setQuery(query: String) {
-        this.query.value = query
-    }
-
     private fun searchNotes(query: String): Flow<List<Note>> {
         return _notes.map { item ->
             item.filter {
                 it.title!!.contains(query) || it.description!!.contains(query)
             }
         }
+    }
+
+    fun setQuery(query: String) {
+        this.query.value = query
     }
 
     fun deleteNote(items: SnapshotStateList<Int>) {
