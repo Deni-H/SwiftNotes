@@ -31,7 +31,7 @@ import com.denihilhamsyah.swiftnotes.ui.components.NoteItem
 
 const val TAG = "NoteListScreen"
 
-@OptIn(ExperimentalFoundationApi::class, ExperimentalAnimationApi::class)
+@OptIn(ExperimentalAnimationApi::class, ExperimentalFoundationApi::class)
 @Composable
 fun NoteListScreen(
     navController: NavController
@@ -59,6 +59,7 @@ fun NoteListScreen(
                     value = query.value,
                     onValueChange = {
                         query.value = it
+                        viewModel.setQuery(it)
                     },
                     onMenuClick = {
                         Toast.makeText(context, "Coming soon!", Toast.LENGTH_SHORT).show()
@@ -159,7 +160,7 @@ fun TopBar(
                     value = value,
                     onValueChange = onValueChange,
                     placeholder = { Text(text = "Search your notes") },
-                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
+                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
                     colors = TextFieldDefaults.textFieldColors(
                         backgroundColor = Color.White,
                         disabledTextColor = Color.Transparent,

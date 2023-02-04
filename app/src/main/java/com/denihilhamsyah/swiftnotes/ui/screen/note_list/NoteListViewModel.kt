@@ -8,7 +8,8 @@ import com.denihilhamsyah.swiftnotes.domain.model.Note
 import com.denihilhamsyah.swiftnotes.domain.repository.NoteRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -17,9 +18,28 @@ class NoteListViewModel @Inject constructor(
     private val noteRepository: NoteRepository
 ): ViewModel() {
 
-    val notes = noteRepository.getAllNotes().map {
-        it.filter { item ->
-            !item.archived
+    private val query = MutableStateFlow("")
+    private val _notes = noteRepository.getAllNotes()
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val notes = query
+        .flatMapLatest { query ->
+            searchNotes(query).map { item ->
+                item.filter {
+                    !it.archived
+                }
+            }
+        }
+
+    fun setQuery(query: String) {
+        this.query.value = query
+    }
+
+    private fun searchNotes(query: String): Flow<List<Note>> {
+        return _notes.map { item ->
+            item.filter {
+                it.title!!.contains(query) || it.description!!.contains(query)
+            }
         }
     }
 
