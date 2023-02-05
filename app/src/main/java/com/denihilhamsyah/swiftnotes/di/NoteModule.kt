@@ -3,8 +3,8 @@ package com.denihilhamsyah.swiftnotes.di
 import android.app.Application
 import androidx.room.Room
 import com.denihilhamsyah.swiftnotes.domain.model.NoteDatabase
-import com.denihilhamsyah.swiftnotes.domain.repository.NoteRepository
-import com.denihilhamsyah.swiftnotes.domain.repository.NoteRepositoryImpl
+import com.denihilhamsyah.swiftnotes.repository.NoteRepository
+import com.denihilhamsyah.swiftnotes.repository.NoteRepositoryImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

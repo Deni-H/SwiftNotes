@@ -8,7 +8,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.denihilhamsyah.swiftnotes.util.TAG
 import com.denihilhamsyah.swiftnotes.domain.model.Note
-import com.denihilhamsyah.swiftnotes.domain.repository.NoteRepository
+import com.denihilhamsyah.swiftnotes.repository.NoteRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

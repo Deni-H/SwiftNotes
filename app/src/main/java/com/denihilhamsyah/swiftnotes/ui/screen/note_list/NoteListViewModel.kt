@@ -5,13 +5,13 @@ import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.denihilhamsyah.swiftnotes.domain.model.Note
-import com.denihilhamsyah.swiftnotes.domain.repository.NoteRepository
+import com.denihilhamsyah.swiftnotes.repository.NoteRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -22,8 +22,10 @@ class NoteListViewModel @Inject constructor(
     private val query = MutableStateFlow("")
     private val _notes = noteRepository.getAllNotes()
 
-    @OptIn(ExperimentalCoroutinesApi::class)
-    val notes = query.flatMapLatest { query -> searchNotes(query) }
+    @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
+    val notes = query
+        .debounce(800)
+        .flatMapLatest { query -> searchNotes(query) }
 
     fun setQuery(query: String) {
         this.query.value = query.lowercase()
@@ -32,7 +34,9 @@ class NoteListViewModel @Inject constructor(
     private fun searchNotes(query: String): Flow<List<Note>> {
         return _notes.map { item ->
             item.filter {
-                !it.archived && (it.title!!.lowercase().contains(query) || it.description!!.lowercase().contains(query))
+                !it.archived &&
+                        (it.title!!.lowercase().contains(query) ||
+                                it.description!!.lowercase().contains(query))
             }
         }
     }

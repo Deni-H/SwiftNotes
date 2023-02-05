@@ -1,4 +1,4 @@
-package com.denihilhamsyah.swiftnotes.domain.repository
+package com.denihilhamsyah.swiftnotes.repository
 
 import com.denihilhamsyah.swiftnotes.domain.model.Note
 import kotlinx.coroutines.flow.Flow
