@@ -19,14 +19,14 @@ class AddEditViewModel @Inject constructor(
     private val noteRepository: NoteRepository
 ) : ViewModel() {
 
-    private val _id: MutableState<Int?> = mutableStateOf(null)
+    private val id: MutableState<Int?> = mutableStateOf(null)
     val title: MutableState<String> = mutableStateOf("")
     val description: MutableState<String> = mutableStateOf("")
 
     fun setId(id: Int) {
         if (id != -1) {
-            _id.value = id
-            Log.d(TAG, _id.value.toString())
+            this.id.value = id
+            Log.d(TAG, this.id.value.toString())
             viewModelScope.launch(Dispatchers.IO) {
                 val result = noteRepository.getNoteById(id)!!
                 launch(Dispatchers.Main) {
@@ -42,7 +42,7 @@ class AddEditViewModel @Inject constructor(
             viewModelScope.launch(Dispatchers.IO) {
                 noteRepository.insertNote(
                     Note(
-                        id = _id.value,
+                        id = id.value,
                         title = title.value,
                         description = description.value
                     )
