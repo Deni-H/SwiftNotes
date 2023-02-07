@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">Swift Notes</string>
     <string name="empty_screen_msg">Notes you add appears here</string>
+
+    <string name="delete_note_success">Note deleted</string>
+    <string name="archive_note_success">Note archived</string>
+    <string name="delete_note_fail">Delete note fail</string>
+    <string name="archive_note_fail">Update note fail</string>
 </resources>
